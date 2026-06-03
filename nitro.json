@@ -1,0 +1,23 @@
+{
+  "cxxNamespace": ["tiktokbusinesskit"],
+  "ios": {
+    "iosModuleName": "TiktokBusinessKit"
+  },
+  "android": {
+    "androidNamespace": ["tiktokbusinesskit"],
+    "androidCxxLibName": "tiktokbusinesskit"
+  },
+  "autolinking": {
+    "TiktokBusinessKit": {
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "TiktokBusinessKit"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "TiktokBusinessKit"
+      }
+    }
+  },
+  "ignorePaths": ["node_modules"]
+}
