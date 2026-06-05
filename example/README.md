@@ -1,97 +1,104 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Example
 
-# Getting Started
+[🇹🇷 Türkçe](./README.tr.md)
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+Sample app that installs `react-native-tiktok-business-kit` from npm. Use it to test SDK initialization, event tracking, `identify`, and `logout`.
 
-## Step 1: Start Metro
-
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
-
-To start the Metro dev server, run the following command from the root of your React Native project:
+## Setup
 
 ```sh
-# Using npm
-npm start
+yarn install
+yarn setup:env
+```
 
-# OR using Yarn
+Fill in `.env` with your TikTok Events Manager credentials:
+
+```env
+TIKTOK_ANDROID_APP_ID=com.example.android
+TIKTOK_IOS_APP_ID=1234567890
+TIKTOK_APP_SECRET=your_access_token
+TIKTOK_TT_APP_ID_IOS=your_tiktok_ios_app_id
+TIKTOK_TT_APP_ID_ANDROID=your_tiktok_android_app_id
+TIKTOK_DEBUG=true
+TIKTOK_TEST_EXTERNAL_ID=user_123
+TIKTOK_TEST_USERNAME=demo_user
+TIKTOK_TEST_PHONE=+905555555555
+TIKTOK_TEST_EMAIL=demo@example.com
+```
+
+For iOS:
+
+```sh
+cd ios && pod install && cd ..
+```
+
+## Run
+
+```sh
 yarn start
 ```
 
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
+In a separate terminal:
 
 ```sh
-# Using npm
-npm run android
-
-# OR using Yarn
+yarn ios
+# or
 yarn android
 ```
 
-### iOS
+## What the app does
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+`App.tsx` initializes the SDK from `.env` on launch. Screen buttons:
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+| Button | Action |
+|--------|--------|
+| ViewContent event gönder | `TikTokEvent.VIEW_CONTENT` with `contents`, then `flush` |
+| Identify | `identify` with the test user from `.env` |
+| Logout | `logout` |
 
-```sh
-bundle install
+### Sample code
+
+SDK initialization (`App.tsx`):
+
+```ts
+import TiktokBusinessKit from 'react-native-tiktok-business-kit';
+
+await TiktokBusinessKit.initialize({
+  appId: tiktokEnv.appId,
+  appSecret: tiktokEnv.appSecret,
+  ttAppId: tiktokEnv.ttAppId,
+  debug: tiktokEnv.debug,
+});
 ```
 
-Then, and every time you update your native dependencies, run:
+Event tracking:
 
-```sh
-bundle exec pod install
+```ts
+import TiktokBusinessKit, { TikTokEvent } from 'react-native-tiktok-business-kit';
+
+TiktokBusinessKit.trackEvent(TikTokEvent.VIEW_CONTENT, {
+  content_type: 'product',
+  currency: 'USD',
+  value: 9.99,
+  contents: [
+    {
+      content_id: 'sku_123',
+      content_type: 'product',
+      currency: 'USD',
+      price: 9.99,
+      quantity: 1,
+    },
+  ],
+});
+TiktokBusinessKit.flush();
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+Platform-specific `appId` is resolved in `tiktokEnv.ts`:
 
-```sh
-# Using npm
-npm run ios
+- **iOS:** `TIKTOK_IOS_APP_ID` (numeric App Store ID)
+- **Android:** `TIKTOK_ANDROID_APP_ID` (package name)
 
-# OR using Yarn
-yarn ios
-```
+## iOS notes
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
-
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
-
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+- `NSUserTrackingUsageDescription` is set in `Info.plist`
+- If `pod install` fails, add `pod 'TikTokBusinessSDK', :modular_headers => true` to `ios/Podfile` (optional)

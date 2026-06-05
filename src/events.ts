@@ -1,0 +1,15 @@
+export enum TikTokEvent {
+	PURCHASE = 'Purchase',
+	COMPLETE_PAYMENT = 'CompletePayment',
+	PLACE_ORDER = 'PlaceAnOrder',
+	ADD_TO_CART = 'AddToCart',
+	VIEW_CONTENT = 'ViewContent',
+	SEARCH = 'Search',
+	REGISTRATION = 'CompleteRegistration',
+	SUBMIT_FORM = 'SubmitForm',
+	CONTACT = 'Contact',
+	DOWNLOAD = 'Download',
+	START_TRIAL = 'StartTrial',
+	SUBSCRIBE = 'Subscribe',
+	LOGIN = 'Login',
+}

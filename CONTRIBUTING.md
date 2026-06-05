@@ -38,6 +38,12 @@ yarn nitrogen
 
 The [example app](/example/) demonstrates usage of the library. You need to run it to test any changes you make.
 
+Copy `example/.env.example` to `example/.env` and fill in your TikTok credentials (`TIKTOK_APP_ID`, `TIKTOK_APP_SECRET`, `TIKTOK_TT_APP_ID`). The `.env` file is gitignored. Restart Metro after changing env values.
+
+```sh
+cp example/.env.example example/.env
+```
+
 It is configured to use the local version of the library, so any changes you make to the library's source code will be reflected in the example app. Changes to the library's JavaScript code will be reflected in the example app without a rebuild, but native code changes will require a rebuild of the example app.
 
 If you want to use Android Studio or Xcode to edit the native code, you can open the `example/android` or `example/ios` directories respectively in those editors. To edit the Objective-C or Swift files, open `example/ios/TiktokBusinessKitExample.xcworkspace` in Xcode and find the source files at `Pods > Development Pods > react-native-tiktok-business-kit`.
